@@ -1,0 +1,59 @@
+Warning
+-------
+
+This is very very experimental. 
+Send the feedback on your experiments to ayourtch at gmail.
+
+
+SXxis: 6-access if viewed from the server side.
+-----------------------------------------------
+
+This small program serves one purpose: help the IPv4 servers and
+IPv6 clients meet.
+
+It does so by terminating the connections from the IPv6 clients,
+getting a little bit of data from them, figuring out which IPv4
+host to contact, and then connecting the  IPv4 and IPv6 worlds. 
+
+Currently it supports only HTTP, but in principle HTTPS is also
+possible - for the clients that do include the hostname into 
+the SSL Client Hello record.
+
+In HTTP, the sxxis scans the beginning of the request for 
+the "Host: " header, and retrieves the hostname from this header.
+Then it derives the "target hostname" and does an A lookup for it.
+
+The resulting IPv4 address is used to connect to the server. 
+When the connection is established, the IPv4 and IPv6 sides 
+are shortcut, and the data is sent between them.
+
+The derivation of the "target hostname" involves 
+appending the REAL_TARGET_PREFIX macro value to 
+the "Host:" header from the HTTP request.
+
+A word of warning:
+-----------------
+
+Since it is only in the first request that 
+the remote IP is included, this is a security risk.
+
+Compiling:
+---------
+
+You need the udns and libev installed in order to compile it.
+
+On Ubuntu/Debian, this means:
+
+sudo apt-get install libudns-dev libev-dev
+
+
+References:
+----------
+
+UDNS library:
+  http://www.corpit.ru/mjt/udns.html 
+
+Porting applications to IPv6 HowTo:
+  http://gsyc.escet.urjc.es/~eva/IPv6-web/ipv6.html
+
+
